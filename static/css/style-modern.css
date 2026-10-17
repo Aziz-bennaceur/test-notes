@@ -1332,3 +1332,29 @@ h1 em {
         transition-duration: 0.01ms !important;
     }
 }
+.status-form {
+    display: flex;
+    margin-top: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.status-form select {
+    min-width: 0;
+    min-height: 38px;
+    padding: 6px 10px;
+    flex: 1 1 150px;
+    border: 1px solid #cfd6cf;
+    border-radius: 6px;
+    color: var(--ink);
+    background: #fffefa;
+    font: inherit;
+    font-size: 13px;
+}
+
+.status-form .button {
+    min-height: 38px;
+    padding: 6px 14px;
+    font-size: 13px;
+}

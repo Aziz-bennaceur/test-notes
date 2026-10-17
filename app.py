@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, session, url_for, flash
+from flask import Flask, render_template, request, redirect, session, url_for, flash, abort
 from flask_mail import Mail, Message
 from html import escape
 import sqlite3
@@ -82,6 +82,18 @@ USER_STATUS_OPTIONS = (
     'Getting better',
     'Getting worse',
     'Already resolved',
+)
+MOOD_OPTIONS = (
+    ('Frustrated', '😤'),
+    ('Angry', '😠'),
+    ('Sad', '😢'),
+    ('Playful', '😏'),
+)
+PRIORITY_OPTIONS = (
+    ('A small thing', '🟢'),
+    ('Worth a chat', '🟡'),
+    ('This matters to me', '🟠'),
+    ('Can we talk soon?', '🔴'),
 )
 
 @app.context_processor
@@ -238,9 +250,90 @@ def thank_you():
 def my_grievances():
     with sqlite3.connect('grievances.db') as conn:
         c = conn.cursor()
-        c.execute("SELECT title, description, mood, priority, response, resolved, user_status FROM grievances")
+        c.execute("SELECT title, description, mood, priority, response, resolved, user_status, id FROM grievances")
         data = c.fetchall()
-    return render_template('my_grievances.html', grievances=data)
+    return render_template('my_grievances.html', grievances=data, status_options=USER_STATUS_OPTIONS)
+
+def notify_note_update(title, user_status, changes):
+    portal_url = (PORTAL_URL or request.url_root).rstrip('/')
+    login_url = f"{portal_url}{url_for('login')}"
+    msg = Message("Note updated by {} 💌".format(USER_NAME),
+                  sender=app.config['MAIL_DEFAULT_SENDER'],
+                  recipients=[app.config['GRIEVANCE_NOTIFICATION_EMAIL']])
+    msg.html = f"""
+        <h3>A note was updated 💌</h3>
+        <p><strong>Title:</strong> {escape(title)}</p>
+        <p><strong>How things are going now:</strong> {escape(user_status)}</p>
+        <p><strong>Changed:</strong> {escape(', '.join(changes))}</p>
+        <hr>
+        <p><a href="{escape(login_url, quote=True)}">Open the portal 💌</a></p>
+    """
+    return send_email_safely(msg)
+
+def flash_update_result(emailed):
+    if emailed:
+        flash('Your note is updated, and {} has been notified 💌'.format(ADMIN_NAME), 'success')
+    else:
+        flash('Your note is updated, but the email notification could not be sent.', 'warning')
+
+@app.route('/update_status/<int:gid>', methods=['POST'])
+@login_required(USER_NAME)
+def update_status(gid):
+    user_status = request.form.get('user_status', '')
+    if user_status not in USER_STATUS_OPTIONS:
+        flash('Please choose a valid update.', 'error')
+        return redirect(url_for('my_grievances'))
+    with sqlite3.connect('grievances.db') as conn:
+        c = conn.cursor()
+        c.execute("SELECT title, user_status FROM grievances WHERE id = ?", (gid,))
+        row = c.fetchone()
+        if row is None:
+            abort(404)
+        if row[1] == user_status:
+            flash('That was already your update.', 'success')
+            return redirect(url_for('my_grievances'))
+        c.execute("UPDATE grievances SET user_status = ? WHERE id = ?", (user_status, gid))
+        conn.commit()
+    flash_update_result(notify_note_update(row[0], user_status, ['status']))
+    return redirect(url_for('my_grievances'))
+
+@app.route('/edit/<int:gid>', methods=['GET', 'POST'])
+@login_required(USER_NAME)
+def edit_note(gid):
+    with sqlite3.connect('grievances.db') as conn:
+        c = conn.cursor()
+        c.execute("SELECT title, description, mood, priority, user_status FROM grievances WHERE id = ?", (gid,))
+        row = c.fetchone()
+        if row is None:
+            abort(404)
+        if request.method == 'POST':
+            title = request.form.get('title', '').strip()
+            desc = request.form.get('description', '').strip()
+            mood = request.form.get('mood', '')
+            priority = request.form.get('priority', '')
+            user_status = request.form.get('user_status', '')
+            valid = (title and desc and len(title) <= 120
+                     and mood in dict(MOOD_OPTIONS)
+                     and priority in dict(PRIORITY_OPTIONS)
+                     and user_status in USER_STATUS_OPTIONS)
+            if not valid:
+                flash('Please fill in every field with a valid choice.', 'error')
+                return redirect(url_for('edit_note', gid=gid))
+            changes = [label for label, old, new in (
+                ('title', row[0], title), ('description', row[1], desc),
+                ('mood', row[2], mood), ('importance', row[3], priority),
+                ('status', row[4], user_status)) if old != new]
+            if not changes:
+                flash('Nothing to update.', 'success')
+                return redirect(url_for('my_grievances'))
+            c.execute("UPDATE grievances SET title = ?, description = ?, mood = ?, priority = ?, user_status = ? WHERE id = ?",
+                      (title, desc, mood, priority, user_status, gid))
+            conn.commit()
+            flash_update_result(notify_note_update(title, user_status, changes))
+            return redirect(url_for('my_grievances'))
+    note = dict(zip(('title', 'description', 'mood', 'priority', 'user_status'), row), id=gid)
+    return render_template('edit_note.html', note=note, status_options=USER_STATUS_OPTIONS,
+                           mood_options=MOOD_OPTIONS, priority_options=PRIORITY_OPTIONS)
 
 @app.route('/view_grievances_admin')
 @login_required(ADMIN_NAME)

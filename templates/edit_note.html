@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Edit a note | Between Us{% endblock %}
+
+{% block content %}
+<section class="content-page compose-page">
+    <div class="page-heading">
+        <div>
+            <p class="eyebrow"><span class="eyebrow-dot"></span> A NOTE THAT CHANGED</p>
+            <h1>Update your note.</h1>
+            <p class="page-lead">Things move. Tell me how this one is going now.</p>
+        </div>
+        <span class="page-index">EDIT</span>
+    </div>
+    <div class="form-panel compose-panel">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages" aria-live="polite">
+                    {% for category, message in messages %}
+                        <p class="flash-message flash-{{ category }}">{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        <form class="compose-form" method="POST">
+            <div class="field-group">
+                <label for="user_status">How are things going now?</label>
+                <div class="select-wrap">
+                    <select id="user_status" name="user_status" required>
+                        {% for option in status_options %}
+                            <option value="{{ option }}" {{ 'selected' if option == note.user_status }}>{{ option }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="field-group">
+                <label for="title">What's on your mind?</label>
+                <input id="title" type="text" name="title" maxlength="120" value="{{ note.title }}" required>
+            </div>
+            <div class="field-group">
+                <label for="description">Tell me about it</label>
+                <textarea id="description" name="description" rows="5" required>{{ note.description }}</textarea>
+            </div>
+            <div class="field-row">
+                <div class="field-group">
+                    <label for="mood">How are you feeling?</label>
+                    <div class="select-wrap">
+                        <select id="mood" name="mood" required>
+                            {% for value, icon in mood_options %}
+                                <option value="{{ value }}" {{ 'selected' if value == note.mood }}>{{ icon }} &nbsp; {{ value }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label for="priority">How much is it weighing on you?</label>
+                    <div class="select-wrap">
+                        <select id="priority" name="priority" required>
+                            {% for value, icon in priority_options %}
+                                <option value="{{ value }}" {{ 'selected' if value == note.priority }}>{{ icon }} &nbsp; {{ value }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="button button-primary">Save changes <span aria-hidden="true">&#8594;</span></button>
+                <a class="text-link" href="{{ url_for('my_grievances') }}">Cancel</a>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock %}
