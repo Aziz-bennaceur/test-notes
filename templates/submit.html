@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}A note for us | Between Us{% endblock %}
+
+{% block content %}
+<section class="content-page compose-page">
+    <div class="page-heading">
+        <div>
+            <p class="eyebrow"><span class="eyebrow-dot"></span> A NOTE FROM THE HEART</p>
+            <h1>Tell me what's on your heart.</h1>
+            <p class="page-lead">No perfect words needed. Just start wherever you are.</p>
+        </div>
+        <span class="page-index">01 <span>/</span> WRITE</span>
+    </div>
+    <div class="form-panel compose-panel">
+        <form class="compose-form" method="POST">
+            <div class="field-group">
+                <label for="title">What's on your mind?</label>
+                <input id="title" type="text" name="title" maxlength="120" placeholder="A little thing I want to talk about" required>
+            </div>
+            <div class="field-group">
+                <label for="description">Tell me about it</label>
+                <textarea id="description" name="description" rows="5" placeholder="Start with what happened, and how it made you feel..." required></textarea>
+                <span class="field-hint">I'll read it with care.</span>
+            </div>
+            <div class="field-row">
+                <div class="field-group">
+                    <label for="mood">How are you feeling?</label>
+                    <div class="select-wrap">
+                        <select id="mood" name="mood" required>
+                            <option value="Frustrated">😤 &nbsp; Frustrated</option>
+                            <option value="Angry">😠 &nbsp; Angry</option>
+                            <option value="Sad">😢 &nbsp; Sad</option>
+                            <option value="Playful">😏 &nbsp; Playful</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label for="priority">How much is it weighing on you?</label>
+                    <div class="select-wrap">
+                        <select id="priority" name="priority" required>
+                            <option value="A small thing">🟢 &nbsp; A small thing</option>
+                            <option value="Worth a chat">🟡 &nbsp; Worth a chat</option>
+                            <option value="This matters to me">🟠 &nbsp; This matters to me</option>
+                            <option value="Can we talk soon?">🔴 &nbsp; Can we talk soon?</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="field-group">
+                <label for="user_status">How are things going now?</label>
+                <div class="select-wrap">
+                    <select id="user_status" name="user_status" required>
+                        <option value="Still bothering me">Still bothering me</option>
+                        <option value="Getting better">Getting better</option>
+                        <option value="Getting worse">Getting worse</option>
+                        <option value="Already resolved">Already resolved</option>
+                    </select>
+                </div>
+                <span class="field-hint">You can let me know if anything changes in a later note.</span>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="button button-primary">Send my note <span aria-hidden="true">&#8594;</span></button>
+                <a class="text-link" href="{{ url_for('my_grievances') }}">Our notes</a>
+            </div>
+            <p class="delivery-note">It'll appear in our inbox, and the portal admin gets an email when delivery is working.</p>
+        </form>
+    </div>
+    <blockquote class="compose-quote">
+        <p>“Even a hard conversation can be a love language.”</p>
+        <cite>A little reminder while you write</cite>
+    </blockquote>
+</section>
+{% endblock %}

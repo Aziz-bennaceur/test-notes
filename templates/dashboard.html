@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}Our inbox | Between Us{% endblock %}
+
+{% block content %}
+<section class="content-page admin-page">
+    <div class="page-heading">
+        <div>
+            <p class="eyebrow"><span class="eyebrow-dot"></span> OUR INBOX</p>
+            <h1>A little room to listen.</h1>
+            <p class="page-lead">Every note is a chance to show you care.</p>
+        </div>
+        <a class="text-link heading-text-link" href="{{ url_for('view_grievances_admin') }}">Open full list</a>
+    </div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages" aria-live="polite">
+                {% for category, message in messages %}
+                    <p class="flash-message flash-{{ category }}">{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+    {% set counts = namespace(open=0, resolved=0) %}
+    {% for grievance in grievances %}
+        {% if grievance[5] == 1 %}
+            {% set counts.resolved = counts.resolved + 1 %}
+        {% else %}
+            {% set counts.open = counts.open + 1 %}
+        {% endif %}
+    {% endfor %}
+    <div class="admin-summary">
+        <div class="summary-item"><span>Total notes</span><strong>{{ grievances|length }}</strong></div>
+        <div class="summary-item summary-open"><span>Needs a reply</span><strong>{{ counts.open }}</strong></div>
+        <div class="summary-item summary-resolved"><span>Resolved</span><strong>{{ counts.resolved }}</strong></div>
+    </div>
+    <div class="list-toolbar">
+        <label class="search-field" for="grievance-search">
+            <span class="sr-only">Search notes</span>
+            <span class="search-symbol" aria-hidden="true">⌕</span>
+            <input id="grievance-search" type="search" placeholder="Search notes..." autocomplete="off">
+        </label>
+        <label class="filter-field" for="grievance-filter">
+            <span class="sr-only">Filter by status</span>
+            <select id="grievance-filter">
+                <option value="all">All notes</option>
+                <option value="open">Needs a reply</option>
+                <option value="resolved">Resolved</option>
+            </select>
+        </label>
+        <span class="result-count" id="result-count">{{ grievances|length }} notes</span>
+    </div>
+    {% if grievances %}
+        <div class="admin-list" id="admin-list">
+            {% for grievance in grievances %}
+                <article class="admin-card" data-status="{{ 'resolved' if grievance[5] == 1 else 'open' }}">
+                    <div class="admin-card-main">
+                        <div class="record-card-top">
+                            <span class="record-index">NOTE {{ '%02d'|format(loop.index) }}</span>
+                            <span class="status-pill {{ 'status-resolved' if grievance[5] == 1 else 'status-open' }}">{{ 'Resolved' if grievance[5] == 1 else 'Needs a reply' }}</span>
+                        </div>
+                        <h2>{{ grievance[1] }}</h2>
+                        <p class="record-description">{{ grievance[2] }}</p>
+                        <dl class="record-details">
+                            <div><dt>Mood</dt><dd>{{ grievance[3] }}</dd></div>
+                            <div><dt>Importance</dt><dd>{{ grievance[4] }}</dd></div>
+                        </dl>
+                        <div class="user-update"><span>HER UPDATE</span><strong>{{ grievance[7] }}</strong></div>
+                        {% if grievance[6] %}
+                            <div class="record-reply"><span class="reply-label">YOUR REPLY</span><p>{{ grievance[6] }}</p></div>
+                        {% endif %}
+                    </div>
+                    <div class="admin-card-actions">
+                        {% if not grievance[6] %}
+                            <form class="response-form" method="POST" action="{{ url_for('respond', gid=grievance[0]) }}">
+                                <label for="response-{{ grievance[0] }}">Write back</label>
+                                <textarea id="response-{{ grievance[0] }}" name="response" rows="3" placeholder="Let her know you hear her..." required></textarea>
+                                <button class="button button-primary button-wide" type="submit">Send a little love <span aria-hidden="true">&#8594;</span></button>
+                            </form>
+                        {% else %}
+                            <p class="reply-sent">Reply sent</p>
+                        {% endif %}
+                        {% if grievance[5] == 1 %}
+                            <span class="resolved-note">This note is resolved</span>
+                        {% else %}
+                            <a class="resolve-link" href="{{ url_for('resolve', gid=grievance[0]) }}">Mark as talked through</a>
+                        {% endif %}
+                    </div>
+                </article>
+            {% endfor %}
+            <p class="filter-empty" id="filter-empty" hidden>No notes match this search.</p>
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <span class="empty-mark" aria-hidden="true">00</span>
+            <h2>All quiet for now.</h2>
+            <p>New notes will appear here when they arrive.</p>
+        </div>
+    {% endif %}
+</section>
+<script src="{{ url_for('static', filename='js/dashboard.js') }}" defer></script>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Come on in | Between Us{% endblock %}
+
+{% block content %}
+<section class="auth-page">
+    <div class="auth-intro">
+        <p class="eyebrow"><span class="eyebrow-dot"></span> YOUR SPACE IS READY</p>
+        <h1>Welcome back,<br><em>{{ user_display_name }}.</em></h1>
+        <p>Pick up where the conversation left off.</p>
+    </div>
+    <div class="form-panel auth-panel">
+        <div class="panel-heading">
+            <span class="panel-index">01 / ACCESS</span>
+            <h2>Sign in</h2>
+        </div>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages" aria-live="polite">
+                    {% for category, message in messages %}
+                        <p class="flash-message flash-{{ category }}">{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        <form class="stacked-form" method="POST">
+            <label for="username">Username</label>
+            <input id="username" type="text" name="username" autocomplete="username" placeholder="Your username" required>
+            <label for="password">Password</label>
+            <input id="password" type="password" name="password" autocomplete="current-password" placeholder="Your password" required>
+            <button type="submit" class="button button-primary button-wide">Continue <span aria-hidden="true">&#8594;</span></button>
+        </form>
+        <p class="form-footnote">Use the sign-in details you were given.</p>
+    </div>
+</section>
+{% endblock %}

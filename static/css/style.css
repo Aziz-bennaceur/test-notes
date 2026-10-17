@@ -1,0 +1,385 @@
+/* Make the background image fill the screen */
+body, html {
+    height: 100%;
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+input, textarea, select, button {
+    width: 100%;
+    max-width: 100%;
+    font-size: 1rem;
+}
+
+.button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+@media (min-width: 480px) {
+    .button-group {
+        flex-direction: row;
+        justify-content: center;
+    }
+}
+
+.login-container {
+    background-image: url('/static/images/login_image.webp'); /* Update with the desired background image */
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    text-align: center;
+    padding-top: 300px;
+}
+
+/* Box styling for login box */
+.login-box {
+    background: rgba(254, 176, 192, 1);
+    padding: 25px;
+    border-radius: 25px;
+    height: auto;
+    width: 90%;
+    max-width: 350px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.login-box h2 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.login-box input {
+    width: 100%;
+    padding: 14px 16px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+.login-box button {
+    width: 100%;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.login-box button:hover {
+    background-color: #45a049;
+}
+
+/* Container for the submit page */
+.submit-container {
+    background-image: url('/static/images/submit_image.webp'); /* Update with the desired background image */
+    background-size: cover;
+    background-position: 45% center;
+    background-repeat: no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding-top: 200px;
+    text-align: center;
+}
+
+/* Box styling for submit form */
+.submit-box {
+    position: absolute;
+    top: 67%;
+    left: 50.5%; 
+    transform: translate(-50%, -50%); /* This will center the box */
+    background: rgba(254, 220, 230, 0.8);
+    padding: 15px 20px;
+    border-radius: 25px;
+    width: 70%;
+    max-width: 400px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.submit-box h2 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Reuse input styles */
+.submit-box input,
+.submit-box select,
+.submit-box textarea {
+    width: 100%;
+    padding: 14px 16px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+    box-sizing: border-box;
+    background-color: #fff0f5;
+}
+
+/* Style the submit button */
+.submit-box button {
+    width: 100%;
+    padding: 14px;
+    background-color: #FF69B4;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.submit-box button:hover {
+    background-color: #ff4892;
+}
+
+/* Container for the dashboard page */
+.dashboard-container {
+    background-image: url('/static/images/dashboard_image.webp'); /* Update with the desired background image */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding-top: 200px;  /* Adjust padding to position the box as per preference */
+    text-align: center;
+}
+
+/* Box styling for the dashboard content */
+.dashboard-box {
+    background: rgba(254, 220, 230, 1);
+    padding: 30px;
+    border-radius: 25px;
+    width: 450px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Dashboard heading */
+.dashboard-box h2 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Styling for the list of grievances or any other content */
+.grievance-list {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #fff0f5;
+    font-size: 14px;
+    box-sizing: border-box;
+    text-align: left;
+}
+
+/* Style for each grievance item */
+.grievance-item {
+    background-color: #fff;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    font-size: 14px;
+}
+
+.grievance-item span {
+    color: #FF69B4;
+}
+
+.grievance-item button {
+    padding: 10px;
+    background-color: #FF69B4;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.grievance-item button:hover {
+    background-color: #ff4892;
+}
+
+/* Container for the home page */
+.home-container {
+    background-image: url('/static/images/home_image.webp'); /* Update with your desired background image */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding-top: 200px;  /* Adjust padding to position the box as per preference */
+    text-align: center;
+}
+
+/* Box styling for the home page content */
+.home-box {
+    position: absolute;
+    top: 15%;
+    background: rgb(224, 93, 132, 0.9);
+    padding: 30px;
+    border-radius: 25px;
+    width: 70%;
+    max-width: 450px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Heading for home page */
+.home-box h2 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Home page description or any other content */
+.home-box p {
+    font-size: 18px;
+    color: #333;
+    margin: 10px 0;
+}
+
+/* Button to navigate to submit page or login */
+.home-box a {
+    width: 100%;
+    text-decoration: none;
+}
+
+.home-box button {
+    width: 100%;
+    padding: 14px;
+    background-color: #FF69B4;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.home-box button:hover {
+    background-color: #ff4892;
+}
+
+@media (max-width: 600px) {
+    .submit-box, .login-box, .dashboard-box {
+        padding: 20px 15px;
+    }
+
+    h2 {
+        font-size: 1.3rem;
+    }
+
+    button {
+        padding: 12px;
+        font-size: 1rem;
+    }
+}
+
+.thankyou-container {
+    background-image: url('/static/images/submit_image.webp'); /* Update with the desired background image */
+    background-size: cover;
+    background-position: 45% center;
+    background-repeat: no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding-top: 200px;
+    text-align: center;
+}
+
+.thankyou-box {
+    position: absolute;
+    background: rgba(255, 240, 245, 0.8);
+    border-radius: 25px;
+    max-width: 400px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    top: 67%;
+    left: 50.5%; 
+    transform: translate(-50%, -50%); /* This will center the box */
+    padding: 15px 20px;
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.thankyou-box h2 {
+    margin-bottom: 15px;
+    font-size: 24px;
+    color: #ff69b4;
+}
+
+.thankyou-box p {
+    font-size: 18px;
+    color: #444;
+    margin-bottom: 20px;
+}
+
+.thankyou-box .btn {
+    background-color: #ff69b4;
+    color: white;
+    padding: 12px 18px;
+    border: none;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 16px;
+}
+.thankyou-box .btn:hover {
+    background-color: #ff4892;
+}
+
+.flash-messages {
+    width: 100%;
+}
+
+.flash-message {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 8px;
+    font-size: 14px !important;
+    text-align: left;
+}
+
+.flash-success {
+    color: #1f5b35 !important;
+    background-color: #e7f5eb;
+    border: 1px solid #a9d7b6;
+}
+
+.flash-warning {
+    color: #704b00 !important;
+    background-color: #fff4d6;
+    border: 1px solid #e8cf88;
+}

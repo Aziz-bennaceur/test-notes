@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Between Us{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style-modern.css') }}">
+</head>
+<body>
+    <div class="site-frame">
+        <header class="site-header">
+            <a class="brand" href="{{ url_for('home') }}" aria-label="Between Us home">
+                <span class="brand-mark" aria-hidden="true">G.</span>
+                <span class="brand-copy">
+                    <strong>Between Us</strong>
+                    <small>A little room for us</small>
+                </span>
+            </a>
+            <nav class="site-nav" aria-label="Main navigation">
+                {% if is_logged_in %}
+                    {% if is_admin %}
+                        <a href="{{ url_for('dashboard') }}">Our inbox</a>
+                    {% elif is_portal_user %}
+                        <a href="{{ url_for('submit') }}">Write a note</a>
+                        <a href="{{ url_for('my_grievances') }}">Your notes</a>
+                    {% endif %}
+                    <a class="nav-action" href="{{ url_for('logout') }}">Sign out</a>
+                {% else %}
+                    <a href="{{ url_for('home') }}">Home</a>
+                    <a class="nav-action" href="{{ url_for('login') }}">Sign in</a>
+                {% endif %}
+            </nav>
+        </header>
+
+        <main class="page-content">
+            {% block content %}{% endblock %}
+        </main>
+
+        <footer class="site-footer">
+            <span>BETWEEN US</span>
+            <span>Made with love, for honest conversations.</span>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Our notes | Between Us{% endblock %}
+
+{% block content %}
+<section class="content-page records-page">
+    <div class="page-heading">
+        <div>
+            <p class="eyebrow"><span class="eyebrow-dot"></span> THE CONVERSATION SO FAR</p>
+            <h1>Our notes, in one place.</h1>
+            <p class="page-lead">Every little effort to understand each other counts.</p>
+        </div>
+        <a class="button button-primary heading-action" href="{{ url_for('submit') }}">Write a note <span aria-hidden="true">&#8594;</span></a>
+    </div>
+    {% if grievances %}
+        <div class="record-grid">
+            {% for grievance in grievances %}
+                <article class="record-card">
+                    <div class="record-card-top">
+                        <span class="record-index">NOTE {{ '%02d'|format(loop.index) }}</span>
+                        <span class="status-pill {{ 'status-resolved' if grievance[5] else 'status-open' }}">{{ 'Resolved' if grievance[5] else 'Open' }}</span>
+                    </div>
+                    <h2>{{ grievance[0] }}</h2>
+                    <p class="record-description">{{ grievance[1] }}</p>
+                    <dl class="record-details">
+                        <div><dt>Mood</dt><dd>{{ grievance[2] }}</dd></div>
+                        <div><dt>Importance</dt><dd>{{ grievance[3] }}</dd></div>
+                    </dl>
+                    <div class="user-update"><span>YOUR UPDATE</span><strong>{{ grievance[6] }}</strong></div>
+                    <div class="record-reply {{ 'reply-pending' if not grievance[4] else '' }}">
+                        <span class="reply-label">REPLY</span>
+                        <p>{{ grievance[4] if grievance[4] else 'No reply yet. Your note is on the list.' }}</p>
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <span class="empty-mark" aria-hidden="true">01</span>
+            <h2>Your first note starts here.</h2>
+            <p>When you share a concern, it will appear here with its reply and status.</p>
+            <a class="button button-primary" href="{{ url_for('submit') }}">Write your first note</a>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}

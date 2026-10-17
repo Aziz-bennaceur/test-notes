@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Between Us{% endblock %}
+
+{% block content %}
+<section class="home-page">
+    <div class="home-hero">
+        <p class="eyebrow"><span class="eyebrow-dot"></span> A LITTLE SPACE FOR US</p>
+        <h1>Love, with room <em>to talk.</em></h1>
+        <p class="hero-copy">A soft place to say what is on your mind, hear each other out, and find your way back to the same side.</p>
+        {% if is_admin %}
+            <a class="button button-primary home-cta" href="{{ url_for('dashboard') }}">Open our inbox <span aria-hidden="true">&#8594;</span></a>
+        {% elif is_portal_user %}
+            <a class="button button-primary home-cta" href="{{ url_for('submit') }}">Tell me what's on your heart <span aria-hidden="true">&#8594;</span></a>
+        {% else %}
+            <a class="button button-primary home-cta" href="{{ url_for('login') }}">Open the portal <span aria-hidden="true">&#8594;</span></a>
+        {% endif %}
+        <p class="home-signoff">A little corner for {{ user_display_name }} and someone who loves her.</p>
+    </div>
+    <div class="home-divider" aria-hidden="true"><span></span><span></span><span></span></div>
+    <section class="home-note" aria-label="Portal note">
+        <p class="eyebrow">KEEP THIS CLOSE</p>
+        <blockquote class="quote-block">
+            <p>“We're on the same side, even when we're figuring things out.”</p>
+            <cite>A little reminder for us</cite>
+        </blockquote>
+    </section>
+</section>
+{% endblock %}
