@@ -6,6 +6,8 @@ import os
 from functools import wraps
 from dotenv import load_dotenv, find_dotenv
 from pathlib import Path
+import json
+import urllib.request
 
 env_path = Path('.') / '.env'
 load_dotenv(dotenv_path=env_path, override=True)
@@ -32,6 +34,7 @@ app.config.update(
     MAIL_USERNAME=os.environ.get('SMTP_USERNAME') or os.environ.get('EMAIL_ADMIN'),
     MAIL_PASSWORD=os.environ.get('SMTP_PASSWORD') or os.environ.get('EMAIL_PASS'),
     MAIL_DEFAULT_SENDER=os.environ.get('EMAIL_DEFAULT_SENDER'),
+    RESEND_API_KEY=os.environ.get('RESEND_API_KEY'),
     GRIEVANCE_NOTIFICATION_EMAIL=os.environ.get(
         'GRIEVANCE_NOTIFICATION_EMAIL', 'azizbennacer9@gmail.com'),
 )
@@ -41,6 +44,28 @@ mail = Mail(app)
 
 def send_email_safely(message):
     try:
+        api_key = app.config.get('RESEND_API_KEY')
+        if api_key:
+            payload = {
+                'from': message.sender or app.config['MAIL_DEFAULT_SENDER'],
+                'to': message.recipients,
+                'subject': message.subject,
+            }
+            if message.html:
+                payload['html'] = message.html
+            if message.body:
+                payload['text'] = message.body
+            api_request = urllib.request.Request(
+                'https://api.resend.com/emails',
+                data=json.dumps(payload).encode('utf-8'),
+                headers={
+                    'Authorization': f'Bearer {api_key}',
+                    'Content-Type': 'application/json',
+                },
+                method='POST',
+            )
+            with urllib.request.urlopen(api_request, timeout=10):
+                return True
         mail.send(message)
     except Exception as error:
         app.logger.error('Email notification failed: %s', type(error).__name__)

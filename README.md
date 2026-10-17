@@ -28,11 +28,9 @@ Want to customize or privately host your own version of this project? Here’s h
 4. In the **Environment Variables** section, add the following:
 
 ```env
-MAIL_SERVER=smtp.your-provider.com
-MAIL_PORT=587
-SMTP_USERNAME=your-smtp-username
-SMTP_PASSWORD=your-smtp-password
-EMAIL_DEFAULT_SENDER=your-sender-address@example.com
+# Recommended: Resend API (no SMTP server, port, or password needed)
+RESEND_API_KEY=re_your_api_key
+EMAIL_DEFAULT_SENDER=Between Us <notifications@your-verified-domain.com>
 GRIEVANCE_NOTIFICATION_EMAIL=azizbennacer9@gmail.com
 EMAIL_USER_RECEIVER=your.partner.email@gmail.com
 USER_NAME=girlfriend
@@ -42,7 +40,7 @@ ADMIN_PASSWORD=admin123
 PORTAL_URL=https://your-railway-url.up.railway.app
 ```
 
-The SMTP account is used only to send mail; new grievance notifications go to `GRIEVANCE_NOTIFICATION_EMAIL` (defaults to `azizbennacer9@gmail.com`).
+Verify your sender domain with Resend before sending to other recipients. If `RESEND_API_KEY` is set, the app uses Resend; otherwise, it uses SMTP. New grievance notifications go to `GRIEVANCE_NOTIFICATION_EMAIL` (defaults to `azizbennacer9@gmail.com`).
 
 5. Done! 🚀 Your private grievance portal is live and ready!
 
@@ -113,18 +111,19 @@ That's it! The image will now be displayed on the page.
    Edit the `.env` file in the root of the project and add the following:
 
     ```env
-   # SMTP server settings for your chosen mail provider
+   # Recommended: Resend API; get a key from https://resend.com/api-keys
+   RESEND_API_KEY=re_your_api_key
+   EMAIL_DEFAULT_SENDER=Between Us <notifications@your-verified-domain.com>
+
+   # Alternative: omit RESEND_API_KEY and configure SMTP instead
    MAIL_SERVER=smtp.your-provider.com
    MAIL_PORT=587
    MAIL_USE_TLS=true
    MAIL_USE_SSL=false
-
-   # SMTP credentials (legacy EMAIL_ADMIN / EMAIL_PASS names are also supported)
    SMTP_USERNAME=your-smtp-username
    SMTP_PASSWORD=your-smtp-password
 
-   # Sender address and recipient of new grievance notifications
-   EMAIL_DEFAULT_SENDER=your-sender-address@example.com
+   # Recipient of new grievance notifications
    GRIEVANCE_NOTIFICATION_EMAIL=azizbennacer9@gmail.com
 
    # Recipient email address for replies to the person submitting grievances
@@ -141,7 +140,7 @@ That's it! The image will now be displayed on the page.
     # Your hosted app URL (used in email templates)
     PORTAL_URL=http://your-grievance-portal-url
     ```
-   - Set the SMTP values for your chosen provider. They do not change the grievance notification recipient.
+   - For Resend, verify the sender domain and set `RESEND_API_KEY` and `EMAIL_DEFAULT_SENDER`. Otherwise, configure the SMTP values; the app selects Resend whenever its API key is present.
    - Replace `girlfriend` and `boyfriend` with user and admin display names respectively, as desired. Similarly with their corresponding passwords.
    - New grievance notifications go to `GRIEVANCE_NOTIFICATION_EMAIL`; it defaults to `azizbennacer9@gmail.com`.
 
